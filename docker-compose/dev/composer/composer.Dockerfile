@@ -1,0 +1,6 @@
+FROM composer:2.8.2
+
+ARG WORKDIR
+WORKDIR ${WORKDIR}
+
+ENTRYPOINT ["composer"]

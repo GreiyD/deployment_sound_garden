@@ -1,0 +1,30 @@
+include:
+  - path: ../../../frontend/docker-compose.yml
+    project_directory: ${ABSOLUTE_ROOT_PATH}/frontend
+    env_file: ${ABSOLUTE_ROOT_PATH}/frontend/.env
+  - path: ../../../api_gateway/docker-compose.yaml
+    project_directory: ${ABSOLUTE_ROOT_PATH}/api_gateway
+    env_file: ${ABSOLUTE_ROOT_PATH}/api_gateway/.env
+  - path: ../../../auth_service/docker-compose.yaml
+    project_directory: ${ABSOLUTE_ROOT_PATH}/auth_service
+    env_file: ${ABSOLUTE_ROOT_PATH}/auth_service/.env.local
+
+services:
+  web-proxy-nginx:
+    container_name: web-proxy-nginx_${PROJECT_NAME}
+    image: nginx:1.26.2-alpine
+    ports:
+      - ${HTTP_PORT}:80
+      - ${HTTPS_PORT}:443
+    env_file:
+      - .env
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:delegated
+    depends_on:
+      - frontend
+    networks:
+      - sound-garden-network-dev
+
+networks:
+  sound-garden-network-dev:
+    external: true

@@ -25,6 +25,25 @@ services:
     networks:
       - sound-garden-network-dev
 
+  auth_service_db:
+    image: mysql:9.1.0
+    container_name: auth_service_db_${PROJECT_NAME}
+    ports:
+      - ${AUTH_SERVICE_MYSQL_PORT}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+    env_file:
+      - .env
+    volumes:
+      - ./databases/auth_service_db_data:/var/lib/mysql
+    depends_on:
+      - auth_service
+    networks:
+      - sound-garden-network-dev
+
 networks:
   sound-garden-network-dev:
     external: true
